@@ -12,6 +12,32 @@ class StoriesTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
+    public function a_visitor_can_browse_the_list_of_stories()
+    {
+        $this->withoutExceptionHandling();
+        $story = factory(Story::class)->create();
+        $this->assertInstanceOf(Story::class, $story);
+
+        $this->get('/stories')
+             ->assertOk();
+    }
+
+    /** @test */
+    public function a_visitor_can_view_one_post()
+    {
+        $this->withoutExceptionHandling();
+        $story = factory(Story::class)->create();
+
+        $this->get('/stories/' . $story->id . '/show')
+             ->assertOk()
+             ->assertSee($story->title)
+             ->assertSee($story->description)
+             ->assertSee($story->author);
+
+
+    }
+
+    /** @test */
     public function a_user_can_add_a_story()
     {
         $this->withoutExceptionHandling();

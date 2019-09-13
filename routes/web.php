@@ -12,9 +12,11 @@
 */
 
 Route::get('/', function() {
-    return view('welcome');
+    return redirect('stories');
 });
 
 Route::patch('stories/{story}/update', 'StoriesController@update');
 Route::post('stories', 'StoriesController@store');
 Route::delete('stories/{story}/destroy', 'StoriesController@destroy');
+Route::get('stories', 'StoriesController@index');
+Route::get('stories/{story}/show', 'StoriesController@show');

@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class StoriesController extends Controller
 {
+    public function index()
+    {
+        $stories = Story::paginate(5);
+
+        return view('stories.index', compact('stories'));
+    }
+
+    public function show(Story $story)
+    {
+        return view('stories.show', compact('story'));
+    }
+
     public function store()
     {
         Story::create($this->getValidate());
