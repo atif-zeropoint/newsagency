@@ -20,3 +20,5 @@ Route::post('stories', 'StoriesController@store');
 Route::delete('stories/{story}/destroy', 'StoriesController@destroy');
 Route::get('stories', 'StoriesController@index');
 Route::get('stories/{story}/show', 'StoriesController@show');
+
+Route::post('stories/{story}/comments', 'StoryCommentsController@store');
