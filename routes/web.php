@@ -15,10 +15,15 @@ Route::get('/', function() {
     return redirect('stories');
 });
 
-Route::patch('stories/{story}/update', 'StoriesController@update');
-Route::post('stories', 'StoriesController@store');
-Route::delete('stories/{story}/destroy', 'StoriesController@destroy');
+Route::group(['middleware' => 'auth'], function(){
+    Route::post('stories', 'StoriesController@store');
+    Route::patch('stories/{story}', 'StoriesController@update');
+    Route::delete('stories/{story}', 'StoriesController@destroy');
+});
+
 Route::get('stories', 'StoriesController@index');
-Route::get('stories/{story}/show', 'StoriesController@show');
+Route::get('stories/{story}', 'StoriesController@show');
 
 Route::post('stories/{story}/comments', 'StoryCommentsController@store');
+
+Auth::routes();

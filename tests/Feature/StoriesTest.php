@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Story;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,6 +11,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class StoriesTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    /** @test */
+    public function a_guest_can_only_view_the_story()
+    {
+
+        $story = factory(Story::class)->create();
+
+        $this->post('/stories', $story->toArray())->assertRedirect('/login');
+        $this->patch($story->path(), $this->data())->assertRedirect('/login');
+        $this->delete($story->path())->assertRedirect('/login');
+
+    }
 
     /** @test */
     public function a_visitor_can_browse_the_list_of_stories()
@@ -28,7 +41,7 @@ class StoriesTest extends TestCase
         $this->withoutExceptionHandling();
         $story = factory(Story::class)->create();
 
-        $this->get($story->path() . '/show')
+        $this->get($story->path())
              ->assertOk()
              ->assertSee($story->title)
              ->assertSee($story->description)
@@ -38,9 +51,9 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_user_can_add_a_story()
     {
-        $this->withoutExceptionHandling();
         $attributes = $this->data();
-        $this->post('/stories', $attributes)->assertOk();
+        $this->be(factory(User::class)->create())
+             ->post('/stories', $attributes)->assertOk();
 
 
         $this->assertCount(1, Story::all());
@@ -50,7 +63,6 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_story_can_be_updated()
     {
-        $this->withoutExceptionHandling();
         $attributes = $this->data();
 
         $story = Story::create($attributes);
@@ -61,7 +73,8 @@ class StoriesTest extends TestCase
             'author'      => 'Updated author name',
         ]);
 
-        $this->patch($story->path() . '/update', $updatedAttribues)->assertOk();
+        $this->be(factory(User::class)->create())
+             ->patch($story->path(), $updatedAttribues)->assertOk();
         $this->assertDatabaseHas('stories', $updatedAttribues);
 
     }
@@ -69,12 +82,12 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_story_can_be_deleted()
     {
-        $this->withoutExceptionHandling();
         $attributes = $this->data();
 
         $story = Story::create($attributes);
 
-        $this->delete($story->path() . '/destroy')->assertRedirect('/stories');
+        $this->be(factory(User::class)->create())
+             ->delete($story->path())->assertRedirect('/stories');
         $this->assertCount(0, Story::all());
     }
 
@@ -84,7 +97,8 @@ class StoriesTest extends TestCase
     {
         $attributes = array_merge($this->data(), ['title' => '']);
 
-        $this->post('/stories', $attributes)
+        $this->be(factory(User::class)->create())
+             ->post('/stories', $attributes)
              ->assertSessionHasErrors('title');
 
         $this->assertCount(0, Story::all());
@@ -95,7 +109,8 @@ class StoriesTest extends TestCase
     {
         $attributes = array_merge($this->data(), ['description' => '']);
 
-        $this->post('/stories', $attributes)
+        $this->be(factory(User::class)->create())
+             ->post('/stories', $attributes)
              ->assertSessionHasErrors('description');
 
         $this->assertDatabaseMissing('stories', $attributes);
@@ -105,8 +120,8 @@ class StoriesTest extends TestCase
     public function an_author_is_required()
     {
         $attributes = array_merge($this->data(), ['author' => '']);
-
-        $this->post('/stories', $attributes)
+        $this->be(factory(User::class)->create())
+             ->post('/stories', $attributes)
              ->assertSessionHasErrors('author');
 
         $this->assertDatabaseMissing('stories', $attributes);
