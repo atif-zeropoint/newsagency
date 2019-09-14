@@ -45,12 +45,13 @@ class StoriesTest extends TestCase
              ->assertOk()
              ->assertSee($story->title)
              ->assertSee($story->description)
-             ->assertSee($story->author);
+             ->assertSee($story->author_id);
     }
 
     /** @test */
     public function a_user_can_add_a_story()
     {
+        $this->withoutExceptionHandling();
         $attributes = $this->data();
         $this->be(factory(User::class)->create())
              ->post('/stories', $attributes)->assertOk();
@@ -70,7 +71,6 @@ class StoriesTest extends TestCase
         $updatedAttribues = array_merge($this->data(), [
             'title'       => 'New title',
             'description' => 'New description',
-            'author'      => 'Updated author name',
         ]);
 
         $this->be(factory(User::class)->create())
@@ -119,10 +119,10 @@ class StoriesTest extends TestCase
     /** @test */
     public function an_author_is_required()
     {
-        $attributes = array_merge($this->data(), ['author' => '']);
+        $attributes = array_merge($this->data(), ['author_id' => null]);
         $this->be(factory(User::class)->create())
              ->post('/stories', $attributes)
-             ->assertSessionHasErrors('author');
+             ->assertSessionHasErrors('author_id');
 
         $this->assertDatabaseMissing('stories', $attributes);
     }
@@ -132,7 +132,7 @@ class StoriesTest extends TestCase
         return [
             'title'       => $this->faker->text,
             'description' => $this->faker->paragraph,
-            'author'      => $this->faker->name,
+            'author_id'   => factory(User::class)->create()->id,
             'published'   => true,
         ];
     }

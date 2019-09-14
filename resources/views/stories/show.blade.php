@@ -11,7 +11,7 @@
 
                 <h2>{{$story->title}}</h2>
                 <hr>
-                <p><i class="fa fa-clock-o"></i> Posted on Posted on {{ $story->created_at }} by <a href="#">{{ $story->author }}</a>
+                <p><i class="fa fa-clock-o"></i> Posted on Posted on {{ $story->created_at }} by <a href="#">{{ $story->author->name }}</a>
                 </p>
                 <hr>
                 <img src="http://placehold.it/900x300" class="img-responsive">

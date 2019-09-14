@@ -9,9 +9,9 @@
         <div class="col-lg-8">
 
             @forelse ($stories as $story)
-                <h1><a href="{{ $story->path() . '/show' }}">{{ $story->title}}</a>
+                <h1><a href="{{ $story->path() }}">{{ $story->title}}</a>
                 </h1>
-                <p class="lead">by <a href="#">{{ $story->author }}</a>
+                <p class="lead">by <a href="#">{{ $story->author->name }}</a>
                 </p>
                 <hr>
                 <p><i class="fa fa-clock-o"></i> Posted on {{ $story->created_at }}</p>
@@ -21,7 +21,7 @@
                 </a>
                 <hr>
                 <p>{{ Str::limit($story->description, 250) }}</p>
-                <a class="btn btn-primary" href="{{ $story->path() . '/show' }}">Read More <i class="fa fa-angle-right"></i></a>
+                <a class="btn btn-primary" href="{{ $story->path()}}">Read More <i class="fa fa-angle-right"></i></a>
 
                 <hr>
             @empty

@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use App\Comment;
 use App\Story;
+use App\User;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +13,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class StoryTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    /** @test */
+    public function a_story_has_an_author(){
+        $this->withoutExceptionHandling();
+        $story = factory(Story::class)->create();
+
+        $this->assertInstanceOf(User::class, $story->author);
+    }
 
     /** @test */
     public function a_story_has_a_path()
@@ -28,7 +38,7 @@ class StoryTest extends TestCase
 
         $data = [
             'detail' => $this->faker->paragraph,
-            'author' => $this->faker->name,
+            'writer_id' => factory(User::class)->create()->id,
         ];
 
         $response = $story->addComment($data);

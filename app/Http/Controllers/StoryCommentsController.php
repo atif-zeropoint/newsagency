@@ -11,7 +11,7 @@ class StoryCommentsController extends Controller
     {
         $story->addComment([
             'detail' => \request('detail'),
-            'author' => \request('author'),
+            'writer_id' => \request('writer_id'),
         ]);
 
         return view('stories.show', compact('story'));

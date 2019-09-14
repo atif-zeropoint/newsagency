@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Comment;
 use App\Story;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,12 +18,13 @@ class StoryCommentsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $story = Story::create($this->data());
+        $story      = Story::create($this->data());
+        $attributes = [
+            'detail'    => $this->faker->paragraph(30),
+            'writer_id' => factory(User::class)->create()->id,
+        ];
 
-        $this->post($story->path() . '/comments', [
-            'detail' => $this->faker->paragraph(200),
-            'author' => $this->faker->name,
-        ])->assertOk();
+        $this->post($story->path() . '/comments', $attributes)->assertOk();
 
         $this->assertCount(1, Comment::all());
 
@@ -33,7 +35,7 @@ class StoryCommentsTest extends TestCase
         return [
             'title'       => $this->faker->text,
             'description' => $this->faker->paragraph,
-            'author'      => $this->faker->name,
+            'author_id'   => factory(User::class)->create()->id,
             'published'   => true,
         ];
     }

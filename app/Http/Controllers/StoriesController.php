@@ -43,11 +43,12 @@ class StoriesController extends Controller
      */
     protected function getValidate()
     {
-        return \request()->validate([
-            'title'       => 'required',
-            'description' => 'required',
-            'author'      => 'required',
-            'published'   => 'nullable',
-        ]);
+        return \request()->validate(
+            [
+                'title'       => 'required',
+                'description' => 'required',
+                'author_id'   => 'required',
+                'published'   => 'nullable',
+            ]);
     }
 }

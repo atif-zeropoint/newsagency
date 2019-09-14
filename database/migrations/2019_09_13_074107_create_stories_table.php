@@ -17,7 +17,7 @@ class CreateStoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('description');
-            $table->string('author');
+            $table->unsignedBigInteger('author_id');
             $table->boolean('published')->default(false);
 
             $table->timestamps();

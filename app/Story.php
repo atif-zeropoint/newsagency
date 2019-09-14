@@ -13,6 +13,11 @@ class Story extends Model
         return '/stories/' . $this->id;
     }
 
+    public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -20,9 +25,12 @@ class Story extends Model
 
     public function addComment($comment)
     {
-        return $this->comments()->create([
-                                             'detail' => $comment['detail'],
-                                             'author' => $comment['author'],
-                                         ]);
+        return $this->comments()->create(
+            [
+                'detail' => $comment['detail'],
+                'writer_id' => $comment['writer_id'],
+
+            ]
+        );
     }
 }
