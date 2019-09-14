@@ -29,29 +29,38 @@
 {{--                </ul>--}}
 
 
+                @foreach($story->comments as $comment)
+                    <hr>
+                    <!-- the comments -->
+                    <h3>{{ $comment->writer->name }}
+                        <small>{{ $comment->created_at }}</small>
+                    </h3>
+                    <p>{{ $comment->detail }}</p>
+                @endforeach
+
                 <hr>
+                @guest
+                    <ol class="login-nav">
+                        <li><a href="#" data-toggle="modal" data-target="#login-modal">traveler login</a></li><span class="vl"></span>
+                        <li><a href="{{ url("/login") }}">homes owner login</a></li>
+                    </ol>
+                    <a href="{{ url("/") }}" class="btn">list your home</a>
+                @endguest
+                @auth
                 <!-- the comment box -->
-                <div class="well">
-                    <h4>Leave a Comment:</h4>
-                    <form role="form">
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
+                    <div class="well">
+                        <h4>Leave a Comment:</h4>
+                        <form role="form" action="{{ $story->path() . '/comments' }}" method="post">
+                            @csrf
 
-{{--                <hr>--}}
-{{--                <!-- the comments -->--}}
-{{--                <h3>Start Bootstrap--}}
-{{--                    <small>9:41 PM on August 24, 2013</small>--}}
-{{--                </h3>--}}
-{{--                <p>This has to be the worst blog post I have ever read. It simply makes no sense. You start off by talking about space or something, then you randomly start babbling about cupcakes, and you end off with random fish names.</p>--}}
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" name="detail"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                @endauth                 <hr>
 
-{{--                <h3>Start Bootstrap--}}
-{{--                    <small>9:47 PM on August 24, 2013</small>--}}
-{{--                </h3>--}}
-{{--                <p>Don't listen to this guy, any blog with the categories 'dinosaurs, spaceships, fried foods, wild animals, alien abductions, business casual, robots, and fireworks' has true potential.</p>--}}
 
             </div>
 

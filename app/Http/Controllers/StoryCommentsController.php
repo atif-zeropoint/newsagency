@@ -9,11 +9,13 @@ class StoryCommentsController extends Controller
 {
     public function store(Story $story)
     {
-        $story->addComment([
-            'detail' => \request('detail'),
-            'writer_id' => \request('writer_id'),
-        ]);
+        $attribute = \request()->validate([
+                                              'detail' => 'required',
+                                          ]);
+        $attribute = array_merge($attribute, ['writer_id' => auth()->id()]);
 
-        return view('stories.show', compact('story'));
+        $story->addComment($attribute);
+
+        return redirect($story->path());
     }
 }
