@@ -18,6 +18,7 @@ class StoriesTest extends TestCase
 
         $story = factory(Story::class)->create();
 
+        $this->get('/stories/create')->assertRedirect('/login');
         $this->post('/stories', $story->toArray())->assertRedirect('/login');
         $this->patch($story->path(), $this->data())->assertRedirect('/login');
         $this->delete($story->path())->assertRedirect('/login');
@@ -51,10 +52,14 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_user_can_add_a_story()
     {
-        $this->withoutExceptionHandling();
         $attributes = $this->data();
-        $this->be(factory(User::class)->create())
-             ->post('/stories', $attributes)->assertOk();
+
+        $user = factory(User::class)->create();
+
+        $this->be($user)->get('/stories/create')->assertOk();
+
+        $this->be($user)
+             ->post('/stories', $attributes)->assertRedirect('/stories');
 
 
         $this->assertCount(1, Story::all());
@@ -116,23 +121,11 @@ class StoriesTest extends TestCase
         $this->assertDatabaseMissing('stories', $attributes);
     }
 
-    /** @test */
-    public function an_author_is_required()
-    {
-        $attributes = array_merge($this->data(), ['author_id' => null]);
-        $this->be(factory(User::class)->create())
-             ->post('/stories', $attributes)
-             ->assertSessionHasErrors('author_id');
-
-        $this->assertDatabaseMissing('stories', $attributes);
-    }
-
     public function data()
     {
         return [
             'title'       => $this->faker->text,
             'description' => $this->faker->paragraph,
-            'author_id'   => factory(User::class)->create()->id,
             'published'   => true,
         ];
     }

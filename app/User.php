@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function stories()
     {
-        return $this->hasMany(Story::class);
+        return $this->hasMany(Story::class, 'author_id');
     }
 
     public function comments()

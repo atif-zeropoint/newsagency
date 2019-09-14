@@ -6,6 +6,7 @@ Route::get('/', function() {
 
 Route::group(['middleware' => 'auth'], function(){
     Route::post('stories/{story}/comments', 'StoryCommentsController@store');
+    Route::get('stories/create', 'StoriesController@create');
     Route::post('stories', 'StoriesController@store');
     Route::patch('stories/{story}', 'StoriesController@update');
     Route::delete('stories/{story}', 'StoriesController@destroy');

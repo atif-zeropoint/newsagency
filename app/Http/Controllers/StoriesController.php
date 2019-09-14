@@ -9,7 +9,7 @@ class StoriesController extends Controller
 {
     public function index()
     {
-        $stories = Story::paginate(5);
+        $stories = Story::orderBy('created_at', 'desc')->paginate(5);
 
         return view('stories.index', compact('stories'));
     }
@@ -19,9 +19,16 @@ class StoriesController extends Controller
         return view('stories.show', compact('story'));
     }
 
+    public function create()
+    {
+        return view('stories.create');
+    }
+
     public function store()
     {
-        Story::create($this->getValidate());
+        auth()->user()->stories()->create($this->getValidate());
+
+        return redirect('/stories');
     }
 
     public function update(Story $story)
@@ -47,7 +54,6 @@ class StoriesController extends Controller
             [
                 'title'       => 'required',
                 'description' => 'required',
-                'author_id'   => 'required',
                 'published'   => 'nullable',
             ]);
     }

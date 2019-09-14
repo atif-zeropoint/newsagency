@@ -50,6 +50,10 @@
                 <!-- the comment box -->
                     <div class="well">
                         <h4>Leave a Comment:</h4>
+                        @if ($errors->has('detail'))
+                            <span class="text-danger">{{ $errors->first('detail') }}</span>
+                        @endif
+
                         <form role="form" action="{{ $story->path() . '/comments' }}" method="post">
                             @csrf
 
