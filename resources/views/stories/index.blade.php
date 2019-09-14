@@ -9,7 +9,7 @@
         <div class="col-lg-8">
 
             @forelse ($stories as $story)
-                <h1><a href="{{ '/stories/' .$story->id. '/show' }}">{{ $story->title}}</a>
+                <h1><a href="{{ $story->path() . '/show' }}">{{ $story->title}}</a>
                 </h1>
                 <p class="lead">by <a href="#">{{ $story->author }}</a>
                 </p>
@@ -21,7 +21,7 @@
                 </a>
                 <hr>
                 <p>{{ Str::limit($story->description, 250) }}</p>
-                <a class="btn btn-primary" href="{{ '/stories/' .$story->id. '/show' }}">Read More <i class="fa fa-angle-right"></i></a>
+                <a class="btn btn-primary" href="{{ $story->path() . '/show' }}">Read More <i class="fa fa-angle-right"></i></a>
 
                 <hr>
             @empty

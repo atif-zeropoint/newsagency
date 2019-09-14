@@ -19,7 +19,7 @@ class StoryCommentsTest extends TestCase
 
         $story = Story::create($this->data());
 
-        $this->post('/stories/' . $story->id . '/comments', [
+        $this->post($story->path() . '/comments', [
             'detail' => $this->faker->paragraph(200),
             'author' => $this->faker->name,
         ])->assertOk();

@@ -28,13 +28,11 @@ class StoriesTest extends TestCase
         $this->withoutExceptionHandling();
         $story = factory(Story::class)->create();
 
-        $this->get('/stories/' . $story->id . '/show')
+        $this->get($story->path() . '/show')
              ->assertOk()
              ->assertSee($story->title)
              ->assertSee($story->description)
              ->assertSee($story->author);
-
-
     }
 
     /** @test */
@@ -63,7 +61,7 @@ class StoriesTest extends TestCase
             'author'      => 'Updated author name',
         ]);
 
-        $this->patch('/stories/' . $story->id . '/update', $updatedAttribues)->assertOk();
+        $this->patch($story->path() . '/update', $updatedAttribues)->assertOk();
         $this->assertDatabaseHas('stories', $updatedAttribues);
 
     }
@@ -76,7 +74,7 @@ class StoriesTest extends TestCase
 
         $story = Story::create($attributes);
 
-        $this->delete('/stories/' . $story->id . '/destroy')->assertRedirect('/stories');
+        $this->delete($story->path() . '/destroy')->assertRedirect('/stories');
         $this->assertCount(0, Story::all());
     }
 

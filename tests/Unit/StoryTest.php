@@ -13,6 +13,15 @@ class StoryTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
+    public function a_story_has_a_path()
+    {
+        $story = factory(Story::class)->create();
+
+        $this->assertEquals('/stories/' . $story->id, $story->path());
+
+    }
+
+    /** @test */
     public function a_story_can_add_comments()
     {
         $story = factory(Story::class)->create();

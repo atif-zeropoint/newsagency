@@ -8,6 +8,11 @@ class Story extends Model
 {
     protected $guarded = [];
 
+    public function path()
+    {
+        return '/stories/' . $this->id;
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -16,8 +21,8 @@ class Story extends Model
     public function addComment($comment)
     {
         return $this->comments()->create([
-            'detail' => $comment['detail'],
-            'author' => $comment['author'],
-        ]);
+                                             'detail' => $comment['detail'],
+                                             'author' => $comment['author'],
+                                         ]);
     }
 }
