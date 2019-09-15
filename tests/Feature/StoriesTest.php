@@ -15,7 +15,6 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_guest_can_only_view_the_story()
     {
-
         $story = factory(Story::class)->create();
 
         $this->get('/stories/create')->assertRedirect('/login');
@@ -69,9 +68,8 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_story_can_be_updated()
     {
-        $attributes = $this->data();
 
-        $story = Story::create($attributes);
+        $story = factory(Story::class)->create();
 
         $updatedAttribues = array_merge($this->data(), [
             'title'       => 'New title',
@@ -87,9 +85,7 @@ class StoriesTest extends TestCase
     /** @test */
     public function a_story_can_be_deleted()
     {
-        $attributes = $this->data();
-
-        $story = Story::create($attributes);
+        $story = factory(Story::class)->create();
 
         $this->be(factory(User::class)->create())
              ->delete($story->path())->assertRedirect('/stories');
